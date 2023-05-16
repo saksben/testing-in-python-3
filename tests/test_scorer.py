@@ -8,7 +8,7 @@ def print_get_score(args, result):
     return f"{args} => {result}\n"
 
 
-def test_scorer():
+def test_get_score_with_weather():
     weathers = [True, False]
     flavours = [IceCream.Strawberry, IceCream.Chocolate, IceCream.Vanilla, None]
     approvaltests.verify_all_combinations(

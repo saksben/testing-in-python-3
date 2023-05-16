@@ -1,5 +1,6 @@
 import enum
 import random
+import requests
 
 
 class IceCream(enum.Enum):
@@ -9,6 +10,7 @@ class IceCream(enum.Enum):
 
 
 flavour = None
+
 
 def get_score():
     sunny_today = lookup_weather()
@@ -32,10 +34,16 @@ def get_score_with_weather(sunny_today, current_flavour=None):
         return -1
 
 
-def lookup_weather():
-    # placeholder implementation - real version would make API call to weather service
-    sunny = random.choice([True, False])
-    return bool(sunny)
+def lookup_weather(location=None):
+    location = location or (59.3293, 18.0686)  # default to Stockholm
+    days_forward = 0
+    params = {"latitude": location[0], "longitude": location[1], "days_forward": days_forward}
+    weather_app = "http://127.0.0.1:3005"
+    response = requests.get(weather_app + "/forecast", params=params)
+    if response.status_code != 200:
+        raise RuntimeError("Weather service unavailable")
+    forecast = response.json()
+    return bool(forecast["weather"]["main"] == "Sunny")
 
 
 def update_selection():
